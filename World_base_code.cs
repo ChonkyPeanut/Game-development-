@@ -128,8 +128,24 @@
     static void Main(string[] args)
     {
       World myWorld = new World();
-		
-  
+			const int MapWidth = 100;
+			const int MapHeight = 100;
+
+			//Player creation
+			Player player = new Player(0,0);
+			
+			//resource code
+			Random random = new Random();
+			Resource[] resources = new Resource[MapWidth * MapHeight];
+			for (int i =0; i<resources.Length; i++)
+			{
+				int x = random.Next(MapWidth);
+				int y = random.Next(MapHeight);
+				int value = random.Next(1, 100000);
+				resources[i] = new Resource(x, y, value);
+			}
+			
+			
       DateTime currentDateTime = DateTime.Now;
   
       GameClock gameClock = new GameClock();
@@ -165,9 +181,41 @@
       {
   
         ConsoleKeyInfo keyInfo = Console.ReadKey();
-  
-        Console.WriteLine($"\nYou pressed: {keyInfo.KeyChar}");
-  
+				Console.WriteLine($"\nYou pressed: {keyInfo.KeyChar}");
+				Console.WriteLine($"Player position: ({player.X}, {player.Y})");
+
+				foreach (Resource resource in resources)
+				{
+					if(resource.X == player.X && resource.Y == player.Y)
+					{
+						player.Mine(resource);
+						resource.X = random.Next(MapWidth);
+						resource.Y = random.Next(MapHeight);
+					}
+				}
+
+				//movement and controls of the player
+				Console.Write("Enter movement (WASD): ");
+				ConsoleKeyInfo keyInfo = Console.ReadKey();
+				Console.WriteLine();
+				switch (keyInfo.Key)
+				{
+					case ConsoleKey.W:
+						player.Move(0, 1);
+						break;
+					case ConsoleKey.S:
+						player.Move(0,-1);
+						break;
+					case ConsoleKey.A:
+						player.Move(-1,0);
+						break;
+					case ConsoleKey.D:
+						player.Move(1,0);
+						break;
+					default:
+						Console.WriteLine("Invalid input");
+						break
+				  
         if (keyInfo.KeyChar == 'esc')
         {
             Console.WriteLine("Exiting...");
