@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-class Player
+class NPC
 {
   public string Name { get; set; }
   public string Role { get; set; }
@@ -54,20 +54,20 @@ class GameClock
 
 class World
 {
-  public List<Character> Characters { get; set; }
+  public List<NPC> NPC { get; set; }
   public List<Location> Locations { get; set; }
   public List<Event> Events { get; set; }
 
   public Wolrd()
   {
-    Characters = new List<Character>();
+    NPC = new List<NPC>();
     Locations = new List<Locations>();
     Events = new List<Events>();
   }
 
-  public void AddCharacter(string name, string role, int age)
+  public void AddNPC(string name, string role, int age)
   {
-    Characters.Add(new Character { Name = name, Role = role, Age = age });
+    NPC.Add(new NPC { Name = name, Role = role, Age = age });
   }
 
   public void AddLocation(string name, string description)
@@ -94,16 +94,16 @@ class Program
 
     Console.WriteLine("Press any key. Press 'esc' to quit.");
 
-    myWorld.AddCharacter("Player", "Villager", 18);
+    myWorld.AddNPC("Player", "Villager", 18);
 
     myWorld.AddLocation("Village", "Hometown, the place where u were raised");
 
     myWorld.AddEvent("New Year", "Celebrate the earth rotating around the Sun 1 full time", new DateTime(2024, 1, 1));
 
-    Console.WriteLine("Characters:");
-    foreach (var character in myWorld.Characters)
+    Console.WriteLine("NPC:");
+    foreach (var NPC in myWorld.NPC)
     {
-      Console.WriteLine($"Name: {character.Name}, Role: {character.Role}, Age: {character.Age}");
+      Console.WriteLine($"Name: {NPC.Name}, Role: {NPC.Role}, Age: {NPC.Age}");
     }
 
     Console.WriteLine("\nLocations:");
