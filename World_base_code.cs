@@ -6,4 +6,5 @@ class Player
 {
   public string Name { get; set; }
   public string Role { get; set; }
-  pubic int Age { get; set; }
+  public int Age { get; set; }
+}
