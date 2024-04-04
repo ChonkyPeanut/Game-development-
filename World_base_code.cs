@@ -272,6 +272,7 @@ class Resource
         {
           Console.WriteLine("Displaying Inventory");
           playerInventory.DisplayInventory();
+					break;
 
           //spare code for when hovering over items is available
           //playerInventory.RemoveItem(item)
