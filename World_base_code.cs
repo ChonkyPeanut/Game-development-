@@ -75,40 +75,34 @@
     	Locations.Add(new Location { Name = name, Description = description });
     }
   
-    public void AddEvent(string name, string description, DateTime date)
-	}
+    public void AddEvent(string name, DateTime date)
+	{
 		Events.Add(new Event { Name = name, Description = description, Date = date });
 	
-  	}
+  }
 
-	class Player
-	{
-		public int X { get; set; }
-		public int y { get; set; }
-		public int Coins { get; set; }
+record Player(int X, int y, int Coins)
+{
+    public Player(int x, int y) : this(x, default, 0)
+    {
+        Y = y;
+    }
 
-		public Player(int x, int y)
-		{
-			X = x;
-			Y = y;
-			Coins = 0;
-		}
+    public void Move(int deltaX, int deltaY)
+    {
+        X += deltaX;
+        Y += deltaY;
+    }
 
-		public void Move(int deltaX, int deltaY)
-		{
-			X += deltaX;
-			Y += deltaY;
-		}
+    public void Mine(Resource resource)
+    {
+        //change coins later when inventory added
+        Coins += recource.Value;
+        Console.WriteLine($"You mined {resource.Value} coins. Total coins {Coins}");
+    }
+}
 
-		public void Mine(Resource resource)
-		{
-			//change coins later when inventory added
-			Coins += recource.Value;
-			Console.WriteLine($"You mined {resource.Value} coins. Total coins {Coins}");
-		}
-	}
-
-	class Resource
+class Resource
 	{
 		public int X { get; set; }
 		public int Y { get; set; }
@@ -122,6 +116,53 @@
 		}
 	}
 
+  public class PlayerInventory
+  {
+    private Dictionary<string, int> items;
+
+    public PlayerInventory()
+    {
+      items = new Dictionary<string, int>();
+    }
+
+    public void AddItem(string itemName, int quantity)
+    {
+      if(items.ContainsKey(itemName))
+      {
+        items[itemName] += quanity;
+      }
+      else
+      {
+        items[itemName] = quantity;
+      }
+    }
+
+    public void RemoveItem(string itemName, int quanity)
+    {
+      if(items.ContainsKey(itemName))
+      {
+        items[itemName] -= quanity;
+        if(items[itemName] <= 0)
+        {
+          items.Remove(itemName);
+        }
+      }
+      else
+      {
+        Console.WriteLine("Item not found in Inventory.");
+      }
+    }
+
+    public void DisplayInventory()
+    {
+      Console.WriteLine("Inventory: ");
+      foreach (var item in items)
+      {
+        Console.WriteLine($"{item.Key}: {item.Value}");
+      }
+    }
+  }
+
   class Program
   {
     static void Main(string[] args)
@@ -132,6 +173,10 @@
 
 			//Player creation
 			Player player = new Player(0,0);
+
+      //Player inventory
+      PlayerInventory playerInventory = new PlayerInventory();
+      playerInventory.AddItem("wooden sword", 1);
 			
 			//resource code
 			Random random = new Random();
@@ -194,8 +239,7 @@
 				}
 
 				//movement and controls of the player
-				Console.Write("Enter movement (WASD): ");
-				ConsoleKeyInfo keyInfo = Console.ReadKey();
+				ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 				Console.WriteLine();
 				switch (keyInfo.Key)
 				{
@@ -223,6 +267,16 @@
             Console.Write("Time played is " + elapsedTime);
             break;
         }
+
+        if (keyInfo.Key == ConsoleKey.I)
+        {
+          Console.WriteLine("Displaying Inventory");
+          playerInventory.DisplayInventory();
+
+          //spare code for when hovering over items is available
+          //playerInventory.RemoveItem(item)
+        }
       }
     }
   }
+}
